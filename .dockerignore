@@ -1,0 +1,11 @@
+!build/libs/
+
+.gradle/
+.idea/
+.circleci/
+devops/
+data/
+**/build/
+.dockerignore
+.gitgnore
+Makefile
