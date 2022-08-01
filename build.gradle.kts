@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.text.SimpleDateFormat
+import java.util.*
 
 plugins {
 	id("org.springframework.boot") version "2.2.1.BUILD-SNAPSHOT"
@@ -73,4 +75,50 @@ dependencies {
 
 tasks.test {
 	useJUnitPlatform()
+}
+
+val gitCommitHash: String by lazy {
+	if (project.hasProperty("buildSHA")) {
+		project.property("buildSHA").toString()
+	} else "no git info"
+}
+
+val currentTime: String by lazy {
+	SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SZ").run {
+		timeZone = TimeZone.getTimeZone("UTC")
+		format(Date())
+	}
+}
+
+tasks {
+
+	register("setup_banner") {
+		doFirst {
+			file("src/main/resources/le0nx-banner.txt").writeText(
+				"""
+					
+				/**************************************************/
+					BUILD SHA: $gitCommitHash
+					VERSION: $version
+					TIME: $currentTime
+				/**************************************************/
+				
+				""".trimIndent()
+			)
+		}
+	}
+
+	bootRun {
+		dependsOn(":setup_banner")
+		mustRunAfter(":setup_banner")
+		if (project.hasProperty("args")) {
+			args(project.property("args").toString().split(","))
+		}
+	}
+
+	bootJar {
+		dependsOn(":setup_banner")
+		mustRunAfter(":setup_banner")
+	}
+
 }
