@@ -16,9 +16,12 @@ data class Person(
         val favoriteQuote: String
 ) {
 
-    fun mature(forDate: LocalDate = LocalDate.now()): Boolean =
-            age(forDate) > 40
+    companion object {
+        private const val IMMATURE_MAX = 40
+    }
 
+    fun isMature(forDate: LocalDate = LocalDate.now()): Boolean =
+            age(forDate) > IMMATURE_MAX
 
     fun age(forDate: LocalDate = LocalDate.now()): Year =
             Period.between(forDate, birthDate).years

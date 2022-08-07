@@ -16,5 +16,4 @@ class GetPersonFromRepository(
                     .findById(id)
                     .toNullable()
                     ?.let { PersonEntity.toBusiness(it) }
-
 }

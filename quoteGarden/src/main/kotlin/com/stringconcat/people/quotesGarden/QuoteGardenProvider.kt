@@ -5,7 +5,7 @@ import com.stringconcat.people.businessPeople.QuotesProvider
 import org.springframework.web.client.RestTemplate
 import javax.inject.Named
 
-const val defaultQuote = "whoops, something went wrong"
+const val DEFAULT_QUOTE = "whoops, something went wrong"
 
 @Named
 class QuoteGardenProvider : QuotesProvider {
@@ -15,7 +15,7 @@ class QuoteGardenProvider : QuotesProvider {
     override fun randomQuote(): Quote =
             RestTemplate()
                     .getForEntity(getRandomUrl, QuoteResponse::class.java)
-                    .body?.quoteText ?: defaultQuote
+                    .body?.quoteText ?: DEFAULT_QUOTE
 
     internal data class QuoteResponse(
             val quoteText: String,
