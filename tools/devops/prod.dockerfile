@@ -3,7 +3,7 @@ FROM gradle:7.5.0-jdk11-alpine AS build
 ARG VCS_REF
 ARG BUILD_DATE
 
-COPY --chown=gradle:gradle ../.. /home/gradle/src
+COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 RUN gradle bootJar -PbuildSHA=${VCS_REF} --warning-mode=all --no-daemon
 

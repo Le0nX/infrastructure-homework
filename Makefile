@@ -68,7 +68,7 @@ compose-logs:
 docker-push: docker-build
 	@echo "docker-push [AWS_REPO=$(AWS_REPO) BUILD_TYPE=$(BUILD_TYPE) IMG_TAG=$(IMG_TAG) PORT=$(PORT)]"
 	@:$(call check_defined, AWS_REPO, aws_account_id.dkr.ecr.region.amazonaws.com/my-repository)
-	docker tag people-api-$(BUILD_TYPE) $(AWS_REPO):$(IMG_TAG)
+	docker tag people-api-$(BUILD_TYPE):$(IMG_TAG) $(AWS_REPO):$(IMG_TAG)
 	docker push $(AWS_REPO):$(IMG_TAG)
 
 # ==============================================================================
