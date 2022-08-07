@@ -1,0 +1,24 @@
+#!/bin/sh
+
+echo "***** Pre-push hook: Running unit tests ******"
+
+DIFFS_COUNT=$(git diff --name-only | wc -l)
+
+# stash any unstaged changes if they exist
+if [ "$DIFFS_COUNT" -ne 0 ]; then
+  git stash -q --keep-index
+fi
+
+make check
+
+status=$?
+
+# unstash the unstaged changes if the exist
+if [ "$DIFFS_COUNT" -ne 0 ]; then
+  git stash pop -q
+fi
+
+echo "***** Pre-push hook: Done ******"
+
+exit $status
+

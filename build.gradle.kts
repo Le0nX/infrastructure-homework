@@ -92,6 +92,13 @@ val currentTime: String by lazy {
 
 tasks {
 
+	register<Copy>("installLocalGitHook") {
+		duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+		from(layout.projectDirectory.file("tools/git-hook/pre-push"))
+		into(layout.projectDirectory.dir(".git/hooks"))
+		fileMode = Integer.parseUnsignedInt("755", 8)
+	}
+
 	register("setup_banner") {
 		doFirst {
 			file("src/main/resources/le0nx-banner.txt").writeText(
@@ -109,6 +116,7 @@ tasks {
 	}
 
 	bootRun {
+		dependsOn(":installLocalGitHook")
 		dependsOn(":setup_banner")
 		mustRunAfter(":setup_banner")
 		if (project.hasProperty("args")) {
@@ -117,6 +125,7 @@ tasks {
 	}
 
 	bootJar {
+		dependsOn(":installLocalGitHook")
 		dependsOn(":setup_banner")
 		mustRunAfter(":setup_banner")
 	}
