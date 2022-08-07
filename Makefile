@@ -39,6 +39,8 @@ PORT ?= 8080
 IMG_TAG ?= latest # to get latest version fom gradle - run ./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{printf $NF}'
 VCS_REF = `git rev-parse --verify --short HEAD`
 DATE = `date -u +"%Y-%m-%dT%H:%M:%SZ"`
+AWS_CLUSTER_NAME = "stringconcat-course"
+AWS_SERVICE_NAME = "spring-service"
 
 # ==============================================================================
 # Running from within docker compose
@@ -68,8 +70,8 @@ compose-logs:
 docker-push: docker-build
 	@echo "docker-push [AWS_REPO=$(AWS_REPO) BUILD_TYPE=$(BUILD_TYPE) IMG_TAG=$(IMG_TAG) PORT=$(PORT)]"
 	@:$(call check_defined, AWS_REPO, aws_account_id.dkr.ecr.region.amazonaws.com/my-repository)
-	docker tag people-api-$(BUILD_TYPE):$(IMG_TAG) $(AWS_REPO):$(IMG_TAG)
-	docker push $(AWS_REPO):$(IMG_TAG)
+	docker tag people-api-$(BUILD_TYPE):$(IMG_TAG) $(AWS_REPO):latest
+	docker push $(AWS_REPO):latest
 
 # ==============================================================================
 # Building containers -t people-api-$(BUILD_TYPE):$(IMG_TAG) \
@@ -134,10 +136,13 @@ check: local-build
 # AWS
 
 aws-up:
-	 aws ecs update-service --desired-count 1 --cluster "stringconcat-course" --service "spring-service"
+	 aws ecs update-service --desired-count 1 --cluster $(AWS_CLUSTER_NAME) --service $(AWS_SERVICE_NAME)
 
 aws-down:
-	 aws ecs update-service --desired-count 0 --cluster "stringconcat-course" --service "spring-service"
+	 aws ecs update-service --desired-count 0 --cluster $(AWS_CLUSTER_NAME) --service $(AWS_SERVICE_NAME)
+
+aws-force-deploy:
+	aws ecs update-service --cluster $(AWS_CLUSTER_NAME) --service $(AWS_SERVICE_NAME) --force-new-deployment
 
 #==============================================================================
 # CI/CD

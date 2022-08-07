@@ -3,7 +3,7 @@ name: Deploy container to Amazon ECR
 on:
   workflow_dispatch:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build-and-deploy:
@@ -30,3 +30,7 @@ jobs:
       run: |
         IMAGE_TAG=$(./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{printf $NF}')
         make docker-push BUILD_TYPE=prod AWS_REPO=$ECR_REGISTRY/$ECR_REPOSITORY IMG_TAG=$IMAGE_TAG
+
+    - name: Force deployment to Amazon ECS
+      run: |
+        make aws-force-deploy
