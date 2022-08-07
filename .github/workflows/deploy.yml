@@ -1,16 +1,13 @@
 name: Deploy container to Amazon ECR
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
 
 jobs:
-
-  build:
-
-    name: Build Image
+  build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
     - name: Check out code
       uses: actions/checkout@v2
@@ -32,4 +29,4 @@ jobs:
         ECR_REPOSITORY: test_app
       run: |
         IMAGE_TAG=$(./gradlew properties --no-daemon --console=plain -q | grep "^version:" | awk '{printf $NF}')
-        make docker-push AWS_REPO=$ECR_REGISTRY/$ECR_REPOSITORY IMG_TAG=$IMAGE_TAG
+        make docker-push BUILD_TYPE=prod AWS_REPO=$ECR_REGISTRY/$ECR_REPOSITORY IMG_TAG=$IMAGE_TAG
