@@ -22,7 +22,7 @@ class MeUseCase(
                 secondName = "Bukharov",
                 birthDate = LocalDate.of(MOCK_YEAR_OF_BIRTH, MOCK_MONTH_OF_BIRTH, MOCK_DAY_OF_BIRTH_MONTH),
                 sex = Person.Sex.MAN,
-                avatartUrl = "https://avatars.dicebear.com/v2/male/my-somffething.svg",
+                avatarUrl = "https://avatars.dicebear.com/v2/male/my-somffething.svg",
                 favoriteQuote = "make the easy things easy, and the hard things possible"
         )
         persistPerson.persist(me)

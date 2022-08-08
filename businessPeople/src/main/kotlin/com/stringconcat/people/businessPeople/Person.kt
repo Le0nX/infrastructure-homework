@@ -7,13 +7,13 @@ import java.util.*
 const val DEFAULT_ROBOT_AVATAR = "https://avatars.dicebear.com/v2/bottts/not%20found.svg"
 
 data class Person(
-        val id: UUID = UUID.randomUUID(),
-        val firstName: String,
-        val secondName: String,
-        val birthDate: LocalDate,
-        val sex: Sex,
-        var avatartUrl: String = DEFAULT_ROBOT_AVATAR,
-        val favoriteQuote: String
+    val id: UUID = UUID.randomUUID(),
+    val firstName: String,
+    val secondName: String,
+    val birthDate: LocalDate,
+    val sex: Sex,
+    var avatarUrl: String = DEFAULT_ROBOT_AVATAR,
+    val favoriteQuote: String
 ) {
 
     companion object {
@@ -31,7 +31,7 @@ data class Person(
     }
 
     fun changeAvatar(pictureUrl: String) {
-        avatartUrl = pictureUrl
+        avatarUrl = pictureUrl
     }
 }
 
